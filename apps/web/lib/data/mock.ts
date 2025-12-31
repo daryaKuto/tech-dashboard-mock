@@ -90,15 +90,20 @@ export const mockEmployeesData: EmployeesResponse = {
   viewType: 'performance',
 };
 
+/**
+ * Mock leads data - fallback only when database is unavailable
+ * Real data should come from Supabase leads table aggregation
+ * See: tooling/scripts/migrations/002_mock_data.sql for actual data
+ */
 export const mockLeadsData: LeadsResponse = {
   sources: [
-    { source: 'Google', percentage: 37.4 },
-    { source: 'Facebook', percentage: 21.6 },
-    { source: 'Angi Ads', percentage: 18.9 },
-    { source: 'Thumbtack', percentage: 12.7 },
-    { source: 'Phone Call', percentage: 9.4 },
+    { source: 'Google', percentage: 37.4, count: 1500 },
+    { source: 'Facebook', percentage: 21.6, count: 866 },
+    { source: 'Angi Ads', percentage: 18.9, count: 758 },
+    { source: 'Thumbtack', percentage: 12.7, count: 509 },
+    { source: 'Phone Call', percentage: 9.4, count: 377 },
   ],
-  total: 0,
+  total: 4010,
   viewType: 'conversion',
 };
 

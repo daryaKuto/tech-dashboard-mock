@@ -34,14 +34,14 @@ export function EmployeesTable() {
   }, [viewType]);
 
   return (
-    <div className="rounded-xl border border-[#E5E7EB] bg-white p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-[#111827]">Employees</h3>
+    <div className="rounded-xl border border-[#E5E7EB] bg-white p-3 sm:p-4">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h3 className="text-base font-semibold text-[#111827] sm:text-lg">Employees</h3>
         <div className="flex gap-1 rounded-lg bg-[#F3F4F6] p-1">
           <button
             onClick={() => setViewType('performance')}
             className={cn(
-              'rounded-md px-3 py-1 text-xs font-medium transition-colors',
+              'rounded-md px-2 py-1 text-xs font-medium transition-colors sm:px-3',
               viewType === 'performance'
                 ? 'bg-white text-[#111827]'
                 : 'text-[#6B7280] hover:text-[#111827]'
@@ -52,7 +52,7 @@ export function EmployeesTable() {
           <button
             onClick={() => setViewType('overtime')}
             className={cn(
-              'rounded-md px-3 py-1 text-xs font-medium transition-colors',
+              'rounded-md px-2 py-1 text-xs font-medium transition-colors sm:px-3',
               viewType === 'overtime'
                 ? 'bg-white text-[#111827]'
                 : 'text-[#6B7280] hover:text-[#111827]'
@@ -62,11 +62,11 @@ export function EmployeesTable() {
           </button>
         </div>
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full">
+      <div className="overflow-x-auto -mx-3 sm:mx-0">
+        <table className="w-full min-w-[600px]">
           <thead>
             <tr className="border-b border-[#E5E7EB]">
-              <th className="pb-3 text-left text-xs font-medium uppercase tracking-wide text-[#6B7280]">
+              <th className="pb-3 pl-3 text-left text-xs font-medium uppercase tracking-wide text-[#6B7280] sm:pl-0">
                 Employee
               </th>
               <th className="pb-3 text-right text-xs font-medium uppercase tracking-wide text-[#6B7280]">
@@ -78,7 +78,7 @@ export function EmployeesTable() {
               <th className="pb-3 text-right text-xs font-medium uppercase tracking-wide text-[#6B7280]">
                 Tasks in progress
               </th>
-              <th className="pb-3 text-right text-xs font-medium uppercase tracking-wide text-[#6B7280]">
+              <th className="pb-3 pr-3 text-right text-xs font-medium uppercase tracking-wide text-[#6B7280] sm:pr-0">
                 Tasks finished
               </th>
             </tr>
@@ -88,18 +88,18 @@ export function EmployeesTable() {
               const avatarColors = getAvatarColor(employee.id);
               return (
                 <tr key={employee.id}>
-                  <td className="py-3">
+                  <td className="py-3 pl-3 sm:pl-0">
                     <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8 relative">
+                      <Avatar className="h-7 w-7 relative sm:h-8 sm:w-8">
                         <AvatarFallback className={cn(avatarColors.bg, avatarColors.text, 'text-xs font-medium')}>
                           {employee.initials}
                         </AvatarFallback>
                         <AvatarStatus status={employee.status} />
                       </Avatar>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
                         <span
                           className={cn(
-                            'text-sm font-medium',
+                            'text-xs font-medium truncate sm:text-sm',
                             employee.isAi ? 'font-bold text-[#111827]' : 'text-[#111827]'
                           )}
                         >
@@ -108,7 +108,7 @@ export function EmployeesTable() {
                         {employee.isAi && (
                           <Badge
                             variant="secondary"
-                            className="h-4 px-1.5 text-xs bg-[#F3F4F6] text-[#111827]"
+                            className="h-4 px-1.5 text-xs bg-[#F3F4F6] text-[#111827] shrink-0"
                           >
                             AI
                           </Badge>
@@ -116,16 +116,16 @@ export function EmployeesTable() {
                       </div>
                     </div>
                   </td>
-                  <td className="py-3 text-right text-sm text-[#111827]">
+                  <td className="py-3 text-right text-xs text-[#111827] sm:text-sm">
                     {employee.callsMinutes.toLocaleString()}
                   </td>
-                  <td className="py-3 text-right text-sm text-[#111827]">
+                  <td className="py-3 text-right text-xs text-[#111827] sm:text-sm">
                     {employee.messages}
                   </td>
-                  <td className="py-3 text-right text-sm text-[#111827]">
+                  <td className="py-3 text-right text-xs text-[#111827] sm:text-sm">
                     {employee.tasksInProgress}
                   </td>
-                  <td className="py-3 text-right text-sm text-[#111827]">
+                  <td className="py-3 pr-3 text-right text-xs text-[#111827] sm:pr-0 sm:text-sm">
                     {employee.tasksFinished}
                   </td>
                 </tr>

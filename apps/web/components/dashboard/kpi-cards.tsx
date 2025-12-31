@@ -60,7 +60,7 @@ function MetricItem({ label, value, delta }: MetricItemProps) {
   };
 
   return (
-    <div className="flex min-w-[200px] flex-col items-start">
+    <div className="flex min-w-0 flex-1 flex-col items-start sm:min-w-[200px] sm:flex-initial">
       <div className="relative mb-1.5">
         <span className="text-[13px] font-medium leading-none tracking-[0.02em] text-[#6B7280]">
           {label}
@@ -68,8 +68,8 @@ function MetricItem({ label, value, delta }: MetricItemProps) {
         <div className="absolute bottom-[-2px] left-0 right-0 h-px border-b border-dotted border-[#D1D5DB]" />
       </div>
       
-      <div className="flex items-baseline">
-        <span className="text-[28px] font-bold leading-8 tracking-[-0.01em] text-[#111827]">
+      <div className="flex flex-wrap items-baseline gap-1">
+        <span className="text-2xl font-bold leading-8 tracking-[-0.01em] text-[#111827] sm:text-[28px]">
           {value}
         </span>
         {formatDelta()}
@@ -141,7 +141,7 @@ export async function KpiCards() {
   }
 
   return (
-    <div className="flex w-full items-start justify-between gap-8 border-b border-[#E5E7EB] bg-white px-6 py-4">
+    <div className="flex w-full flex-wrap items-start justify-between gap-4 border-b border-[#E5E7EB] bg-white px-4 py-4 sm:gap-6 sm:px-6 lg:gap-8">
       {kpis.map((kpi) => (
         <MetricItem key={kpi.label} {...kpi} />
       ))}

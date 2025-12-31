@@ -26,10 +26,10 @@ export async function ActionNeeded() {
   }
 
   return (
-    <div className="rounded-xl border border-[#E5E7EB] bg-white p-4">
+    <div className="rounded-xl border border-[#E5E7EB] bg-white p-3 sm:p-4">
       <div className="mb-4">
-        <h3 className="text-lg font-semibold text-[#111827]">Action needed</h3>
-        <p className="mt-1 text-sm text-[#6B7280]">{tasks.length} tasks total</p>
+        <h3 className="text-base font-semibold text-[#111827] sm:text-lg">Action needed</h3>
+        <p className="mt-1 text-xs text-[#6B7280] sm:text-sm">{tasks.length} tasks total</p>
       </div>
       <div className="space-y-3">
         {tasks.map((task) => {

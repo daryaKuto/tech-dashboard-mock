@@ -32,13 +32,13 @@ export function InsightColumn() {
   const [timeRange, setTimeRange] = useState<'all' | 'avg' | '30days'>('all');
 
   return (
-    <div className="w-[320px] min-h-screen space-y-6">
+    <div className="w-full space-y-4 sm:space-y-6 lg:w-[320px] lg:min-h-screen">
       {/* Time Range Filter */}
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <button
           onClick={() => setTimeRange('all')}
           className={cn(
-            'h-8 rounded-full border px-3 text-[13px] font-medium transition-colors',
+            'h-8 rounded-full border px-2 text-[12px] font-medium transition-colors sm:px-3 sm:text-[13px]',
             timeRange === 'all'
               ? 'border-[#E5E7EB] bg-[#F3F4F6] text-[#111827]'
               : 'border-[#E5E7EB] bg-white text-[#6B7280]'
@@ -49,7 +49,7 @@ export function InsightColumn() {
         <button
           onClick={() => setTimeRange('avg')}
           className={cn(
-            'h-8 rounded-full border px-3 text-[13px] font-medium transition-colors',
+            'h-8 rounded-full border px-2 text-[12px] font-medium transition-colors sm:px-3 sm:text-[13px]',
             timeRange === 'avg'
               ? 'border-[#E5E7EB] bg-[#F3F4F6] text-[#111827]'
               : 'border-[#E5E7EB] bg-white text-[#6B7280]'
@@ -60,7 +60,7 @@ export function InsightColumn() {
         <button
           onClick={() => setTimeRange('30days')}
           className={cn(
-            'h-8 rounded-full border px-3 text-[13px] font-medium transition-colors',
+            'h-8 rounded-full border px-2 text-[12px] font-medium transition-colors sm:px-3 sm:text-[13px]',
             timeRange === '30days'
               ? 'border-[#E5E7EB] bg-[#F3F4F6] text-[#111827]'
               : 'border-[#E5E7EB] bg-white text-[#6B7280]'

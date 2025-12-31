@@ -123,50 +123,55 @@ ON CONFLICT DO NOTHING;
 -- ============================================
 -- 6. CREATE LEADS
 -- ============================================
--- Google leads (37.4%)
+-- Exact counts to match design spec:
+-- Google: 1500 (37.4%), Facebook: 866 (21.6%), Angi Ads: 758 (18.9%), 
+-- Thumbtack: 509 (12.7%), Phone Call: 377 (9.4%)
+-- Total: 4010 leads
+
+-- Google leads (1500 = 37.4%)
 INSERT INTO public.leads (organization_id, source, customer_id, converted, converted_at, created_at)
 SELECT v_org_id, 'Google', 
   CASE WHEN random() > 0.5 THEN v_customer1_id ELSE NULL END,
   random() > 0.3,
   CASE WHEN random() > 0.3 THEN NOW() - (random() * 30 || ' days')::INTERVAL ELSE NULL END,
   NOW() - (random() * 60 || ' days')::INTERVAL
-FROM generate_series(1, 37);
+FROM generate_series(1, 1500);
 
--- Facebook leads (21.6%)
+-- Facebook leads (866 = 21.6%)
 INSERT INTO public.leads (organization_id, source, customer_id, converted, converted_at, created_at)
 SELECT v_org_id, 'Facebook',
   CASE WHEN random() > 0.6 THEN v_customer2_id ELSE NULL END,
   random() > 0.4,
   CASE WHEN random() > 0.4 THEN NOW() - (random() * 30 || ' days')::INTERVAL ELSE NULL END,
   NOW() - (random() * 60 || ' days')::INTERVAL
-FROM generate_series(1, 22);
+FROM generate_series(1, 866);
 
--- Angi Ads leads (18.9%)
+-- Angi Ads leads (758 = 18.9%)
 INSERT INTO public.leads (organization_id, source, customer_id, converted, converted_at, created_at)
 SELECT v_org_id, 'Angi Ads',
   CASE WHEN random() > 0.5 THEN v_customer3_id ELSE NULL END,
   random() > 0.35,
   CASE WHEN random() > 0.35 THEN NOW() - (random() * 30 || ' days')::INTERVAL ELSE NULL END,
   NOW() - (random() * 60 || ' days')::INTERVAL
-FROM generate_series(1, 19);
+FROM generate_series(1, 758);
 
--- Thumbtack leads (12.7%)
+-- Thumbtack leads (509 = 12.7%)
 INSERT INTO public.leads (organization_id, source, customer_id, converted, converted_at, created_at)
 SELECT v_org_id, 'Thumbtack',
   CASE WHEN random() > 0.5 THEN v_customer4_id ELSE NULL END,
   random() > 0.45,
   CASE WHEN random() > 0.45 THEN NOW() - (random() * 30 || ' days')::INTERVAL ELSE NULL END,
   NOW() - (random() * 60 || ' days')::INTERVAL
-FROM generate_series(1, 13);
+FROM generate_series(1, 509);
 
--- Phone Call leads (9.4%)
+-- Phone Call leads (377 = 9.4%)
 INSERT INTO public.leads (organization_id, source, customer_id, converted, converted_at, created_at)
 SELECT v_org_id, 'Phone Call',
   CASE WHEN random() > 0.4 THEN v_customer5_id ELSE NULL END,
   random() > 0.25,
   CASE WHEN random() > 0.25 THEN NOW() - (random() * 30 || ' days')::INTERVAL ELSE NULL END,
   NOW() - (random() * 60 || ' days')::INTERVAL
-FROM generate_series(1, 9);
+FROM generate_series(1, 377);
 
 -- ============================================
 -- 7. CREATE KPI METRICS (time series data)

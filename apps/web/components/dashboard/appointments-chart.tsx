@@ -52,16 +52,16 @@ export function AppointmentsChart() {
   }));
 
   return (
-    <div className="rounded-xl border border-[#E5E7EB] bg-white p-4">
+    <div className="rounded-xl border border-[#E5E7EB] bg-white p-3 sm:p-4">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-[#111827]">Appointments</h3>
+          <h3 className="text-base font-semibold text-[#111827] sm:text-lg">Appointments</h3>
           {loading ? (
             <div className="mt-1 h-8 w-32 animate-pulse rounded bg-[#E5E7EB]" />
           ) : (
-            <div className="mt-1 flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-[#111827]">{total}</span>
-              <span className="text-sm font-medium text-[#16A34A]">
+            <div className="mt-1 flex flex-wrap items-baseline gap-2">
+              <span className="text-2xl font-bold text-[#111827] sm:text-3xl">{total}</span>
+              <span className="text-xs font-medium text-[#16A34A] sm:text-sm">
                 {delta >= 0 ? '+' : ''}
                 {delta} last week
               </span>
@@ -69,7 +69,7 @@ export function AppointmentsChart() {
           )}
         </div>
       </div>
-      <ResponsiveContainer width="100%" height={240}>
+      <ResponsiveContainer width="100%" height={200} className="sm:h-[240px]">
         <ComposedChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
           <XAxis
