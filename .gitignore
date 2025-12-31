@@ -1,0 +1,52 @@
+# Environment variables
+.env
+.env.*
+.env.local
+.env.development
+.env.production
+!.env.example
+
+# IDE and editor
+.cursor/
+.cursorrules
+
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.png
+*.jpg
+*.jpeg
+!public/*.png
+!public/*.jpg
+!public/*.jpeg
+!apps/*/public/*.png
+!apps/*/public/*.jpg
+!apps/*/public/*.jpeg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing
+coverage/
+
