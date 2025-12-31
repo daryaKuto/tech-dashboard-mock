@@ -1,44 +1,73 @@
-# ThatOnePainter Dashboard
+# Tech Dashboard
 
-A production-ready Next.js dashboard application built with TypeScript, Supabase, and OpenAI integration.
+A production-ready Next.js dashboard application with TypeScript, Supabase, and Tailwind CSS.
+
+![Dashboard Preview](apps/web/public/dash-preview.png)
 
 ## Tech Stack
 
-- **Frontend**: Next.js 14+ (App Router), React, TypeScript
-- **Styling**: Tailwind CSS, shadcn/ui
+- **Framework**: Next.js 15 (App Router), React 19, TypeScript
+- **Styling**: Tailwind CSS, shadcn/ui, Radix UI
 - **Database**: Supabase (PostgreSQL with RLS)
-- **AI**: OpenAI API
+- **Validation**: Zod schemas for API contracts
 - **Charts**: Recharts
-- **Architecture**: Monorepo structure with layered architecture
+- **Architecture**: Layered architecture with services pattern
 
 ## Project Structure
 
 ```
 apps/
-  web/                    # Next.js application
+  web/                       # Next.js application
     app/
-      (dashboard)/        # Dashboard routes
-        layout.tsx        # Dashboard layout with sidebar
-        page.tsx          # Main dashboard page
+      (dashboard)/           # Dashboard routes (layout + page)
+      api/                   # API route handlers
+        appointments/        # Appointments endpoint
+        employees/           # Employees endpoint
+        kpi/                 # KPI metrics endpoint
+        leads/               # Leads endpoint
+        tasks/               # Tasks endpoint
+      auth/                  # Auth callback handler
+      login/                 # Login page
+      signup/                # Signup page
     components/
-      dashboard/          # Dashboard-specific components
-      ui/                 # shadcn/ui components
+      dashboard/             # Dashboard components
+      ui/                    # shadcn/ui components
     lib/
-      supabase/           # Supabase clients (browser, server, service)
-      openai/             # OpenAI client wrapper
-      env.ts              # Environment variable validation
-
-packages/
-  api/                    # Shared API contracts and Zod schemas
-    schemas/              # Data validation schemas
-    types.ts              # API response types
+      api/                   # API types and Zod schemas
+        schemas/             # Validation schemas per endpoint
+      services/              # Business logic layer
+        appointments/        # Appointments service + repo
+        employees/           # Employees service + repo
+        kpi/                 # KPI service + repo
+        leads/               # Leads service + repo
+        tasks/               # Tasks service + repo
+      supabase/              # Supabase clients (browser, server, service)
+      auth.ts                # Auth context helper
+      env.ts                 # Environment validation
+      rate-limit.ts          # Rate limiting utilities
+    middleware.ts            # Auth + rate limiting middleware
 
 tooling/
   scripts/
-    migrations/           # Database migration files
+    migrations/              # SQL migration files
 ```
 
-## Setup Instructions
+## Features
+
+- ✅ Dashboard layout with sidebar navigation
+- ✅ KPI summary cards (Drillbit Balance, ROI, Revenue, Costs)
+- ✅ Appointments chart (bar + line combo)
+- ✅ Leads by source visualization
+- ✅ Action needed task list
+- ✅ Employees performance table
+- ✅ Insight column with business metrics
+- ✅ Authentication with Supabase Auth
+- ✅ Rate limiting (API + auth routes)
+- ✅ Type-safe API with Zod validation
+- ✅ Row Level Security (RLS) policies
+- ✅ Development mode with mock data
+
+## Getting Started
 
 ### 1. Install Dependencies
 
@@ -57,19 +86,16 @@ NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 
-# OpenAI
+# OpenAI (optional)
 OPENAI_API_KEY=your_openai_api_key
-
-# Node Environment
-NODE_ENV=development
 ```
 
 ### 3. Database Setup
 
 1. Create a new Supabase project at https://supabase.com
-2. Run the migration file in the Supabase SQL Editor:
-   - File: `tooling/scripts/migrations/001_initial_schema.sql`
-   - This creates all tables, indexes, and RLS policies
+2. Run the migration files in order:
+   - `tooling/scripts/migrations/001_initial_schema.sql` - Tables, indexes, RLS policies
+   - `tooling/scripts/migrations/002_mock_data.sql` - Sample data for development
 
 ### 4. Run Development Server
 
@@ -80,95 +106,57 @@ npm run dev
 
 Visit http://localhost:3000 to see the dashboard.
 
+> **Note**: In development mode, authentication is bypassed and mock data is used automatically.
+
 ## Architecture
 
 The application follows a layered architecture:
 
-1. **UI Layer** (`components/`, `app/`)
-   - React components and pages
-   - No direct database queries
-   - Minimal side effects
+| Layer | Location | Purpose |
+|-------|----------|---------|
+| **UI** | `components/`, `app/` | React components and pages |
+| **Transport** | `app/api/` | Route handlers, request/response |
+| **Service** | `lib/services/*/service.ts` | Business logic, orchestration |
+| **Repository** | `lib/services/*/repo.ts` | Data access, Supabase queries |
+| **Schema** | `lib/api/schemas/` | Zod validation, type contracts |
 
-2. **Feature Layer** (`packages/core/`)
-   - Business logic and orchestration
-   - Permission checks
-   - Domain models
+## API Endpoints
 
-3. **Data Layer** (`packages/data/`, `lib/supabase/`)
-   - Supabase queries
-   - External API calls (OpenAI)
-   - Data access patterns
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/kpi` | KPI metrics (balance, ROI, revenue, costs) |
+| `GET /api/appointments?viewType=chart\|table` | Appointments data |
+| `GET /api/leads?viewType=conversion\|location` | Leads by source |
+| `GET /api/employees?viewType=performance\|overtime` | Employee data |
+| `GET /api/tasks` | Action items / tasks |
 
-4. **Transport Layer** (`app/api/`)
-   - Next.js route handlers
-   - Server actions
-   - API endpoints
+All endpoints return a standardized response:
 
-## Features
-
-- ✅ Dashboard layout with sidebar navigation
-- ✅ KPI summary cards (Drillbit Balance, ROI, Revenue, Costs)
-- ✅ Appointments chart (bar + line combo)
-- ✅ Leads by source visualization
-- ✅ Action needed task list
-- ✅ Employees performance table
-- ✅ Insight column with business metrics
-- ✅ Responsive design matching design spec
-- ✅ Type-safe with TypeScript and Zod validation
-- ✅ RLS policies for data security
-
-## Design Specifications
-
-- **Colors**: Exact color palette from design spec
-  - Background: `#FAFAF9`
-  - Cards: `#FFFFFF`
-  - Primary text: `#111827`
-  - Secondary text: `#6B7280`
-  - Green positive: `#16A34A`
-  - Orange accent: `#FB923C`
-
-- **Typography**: Inter font family
-- **Layout**: Fixed width ~1440px, sidebar ~240px
-
-## Next Steps
-
-1. **Connect to Real Data**: Update components to fetch from API routes
-2. **Implement API Routes**: Create route handlers in `app/api/`
-3. **Add Data Layer**: Implement repositories and services
-4. **Authentication**: Add Supabase Auth integration
-5. **Real-time Updates**: Add Supabase Realtime subscriptions
-6. **Voice Integration**: Integrate VAPI, Eleven Labs, Twilio
-7. **Backend Integration**: Connect Porter and Temporal
-
-## Development
-
-### Code Style
-
-- TypeScript strict mode enabled
-- ESLint configured
-- Prettier formatting
-
-### Testing
-
-```bash
-npm run test
-```
-
-### Build
-
-```bash
-npm run build
+```typescript
+{ ok: true, data: T } | { ok: false, error: { code: string, message: string } }
 ```
 
 ## Security
 
-- ✅ Row Level Security (RLS) enabled on all tables
+- ✅ Row Level Security (RLS) on all tables
 - ✅ Environment variables validated with Zod
 - ✅ Server-side authentication checks
+- ✅ Rate limiting on API and auth routes
 - ✅ No service role keys in client bundles
-- ✅ Input validation on all API routes
+
+## Development
+
+```bash
+# Start dev server
+npm run dev
+
+# Type check
+npm run build
+
+# Lint
+npm run lint
+```
 
 ## License
 
 MIT
-
