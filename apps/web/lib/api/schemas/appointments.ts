@@ -7,6 +7,7 @@ export const appointmentDataPointSchema = z.object({
   date: z.string(),
   count: z.number(),
   revenue: z.number(),
+  costs: z.number().optional(),
 });
 
 export type AppointmentDataPoint = z.infer<typeof appointmentDataPointSchema>;

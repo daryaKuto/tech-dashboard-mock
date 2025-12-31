@@ -141,7 +141,7 @@ export async function KpiCards() {
   }
 
   return (
-    <div className="flex w-full flex-wrap items-start justify-between gap-4 border-b border-[#E5E7EB] bg-white px-4 py-4 sm:gap-6 sm:px-6 lg:gap-8">
+    <div className="flex w-full flex-nowrap items-start justify-start gap-3 border-b border-[#E5E7EB] bg-white px-4 py-4 sm:gap-4 sm:px-6 lg:gap-6">
       {kpis.map((kpi) => (
         <MetricItem key={kpi.label} {...kpi} />
       ))}

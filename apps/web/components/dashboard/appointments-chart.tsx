@@ -49,67 +49,138 @@ export function AppointmentsChart() {
     date: d.date,
     appointments: d.count,
     revenue: d.revenue,
+    costs: d.costs || 0,
   }));
 
+  // #region agent log
+  fetch('http://127.0.0.1:7245/ingest/35a4f109-9d2a-402c-853d-9cb202e24d3a',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'appointments-chart.tsx:53',message:'Chart data prepared',data:{chartDataLength:chartData.length,samplePoint:chartData[0],revenueRange:[Math.min(...chartData.map(d=>d.revenue)),Math.max(...chartData.map(d=>d.revenue))],appointmentsRange:[Math.min(...chartData.map(d=>d.appointments)),Math.max(...chartData.map(d=>d.appointments))]},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  // #endregion
+
   return (
-    <div className="rounded-xl border border-[#E5E7EB] bg-white p-3 sm:p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <h3 className="text-base font-semibold text-[#111827] sm:text-lg">Appointments</h3>
-          {loading ? (
-            <div className="mt-1 h-8 w-32 animate-pulse rounded bg-[#E5E7EB]" />
-          ) : (
-            <div className="mt-1 flex flex-wrap items-baseline gap-2">
-              <span className="text-2xl font-bold text-[#111827] sm:text-3xl">{total}</span>
-              <span className="text-xs font-medium text-[#16A34A] sm:text-sm">
-                {delta >= 0 ? '+' : ''}
-                {delta} last week
-              </span>
-            </div>
-          )}
+    <div className="h-[340px] rounded-[12px] border border-[#E5E7EB] bg-white p-4">
+      {/* Header Row */}
+      <div className="mb-4">
+        <h3 className="text-[16px] font-semibold text-[#111827]">Appointments</h3>
+        {loading ? (
+          <div className="mt-1 h-8 w-32 animate-pulse rounded bg-[#E5E7EB]" />
+        ) : (
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="text-[28px] font-bold text-[#111827]">{total}</span>
+            <span className="text-[13px] text-[#16A34A]">
+              ▲ {delta} last week
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Legend Row - Centered */}
+      <div className="mb-3 flex items-center justify-center gap-4 text-[12px] text-[#6B7280]">
+        <div className="flex items-center gap-1.5">
+          <div className="h-3 w-3 rounded bg-[#DCFCE7]"></div>
+          <span>Revenue</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="h-0.5 w-4 bg-[#FB923C]"></div>
+          <span>Appointments</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="h-0.5 w-4 border-b border-dashed border-[#9CA3AF]"></div>
+          <span>Costs</span>
         </div>
       </div>
-      <ResponsiveContainer width="100%" height={200} className="sm:h-[240px]">
+
+      {/* Chart Area */}
+      <ResponsiveContainer width="100%" height={220}>
         <ComposedChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
           <XAxis
             dataKey="date"
-            tick={{ fill: '#6B7280', fontSize: 12 }}
+            tick={{ fill: '#9CA3AF', fontSize: 12 }}
             axisLine={{ stroke: '#E5E7EB' }}
+            tickLine={false}
           />
+          {/* Left Y-axis - Appointments count */}
           <YAxis
             yAxisId="left"
-            tick={{ fill: '#6B7280', fontSize: 12 }}
+            orientation="left"
+            tick={{ fill: '#9CA3AF', fontSize: 12 }}
             axisLine={{ stroke: '#E5E7EB' }}
+            tickLine={{ stroke: '#E5E7EB' }}
+            domain={[0, 600]}
+            ticks={[0, 300, 600]}
+            tickCount={3}
+            allowDecimals={false}
+            width={40}
           />
+          {/* Right Y-axis - Revenue scale */}
           <YAxis
             yAxisId="right"
             orientation="right"
-            tick={{ fill: '#6B7280', fontSize: 12 }}
-            axisLine={{ stroke: '#E5E7EB' }}
-            domain={[250000, 1000000]}
-            tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+            tick={{ fill: '#9CA3AF', fontSize: 12 }}
+            axisLine={false}
+            tickLine={false}
+            domain={[0, 1000000]}
+            ticks={[0, 250000, 500000, 750000, 1000000]}
+            tickFormatter={(value) => {
+              if (value === 0) return '$0';
+              if (value === 1000000) return '$1M';
+              return `$${(value / 1000).toFixed(0)}k`;
+            }}
           />
           <Tooltip
             contentStyle={{
               backgroundColor: 'white',
               border: '1px solid #E5E7EB',
               borderRadius: '8px',
+              fontSize: '12px',
             }}
           />
+          {/* Revenue Bars */}
           <Bar
-            yAxisId="left"
-            dataKey="appointments"
+            yAxisId="right"
+            dataKey="revenue"
             fill="#DCFCE7"
             radius={[4, 4, 0, 0]}
           />
+          {/* Orange Line - traces top of revenue bars */}
+          {/* #region agent log */}
+          {(() => {
+            const barAxis = 'right';
+            const barDataKey = 'revenue';
+            const lineAxis = 'right';
+            const lineDataKey = 'revenue';
+            fetch('http://127.0.0.1:7245/ingest/35a4f109-9d2a-402c-853d-9cb202e24d3a',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'appointments-chart.tsx:148',message:'Orange line configuration - should match bars',data:{barAxis,barDataKey,lineAxis,lineDataKey,axesMatch:barAxis===lineAxis,dataKeysMatch:barDataKey===lineDataKey},timestamp:Date.now(),sessionId:'debug-session',runId:'post-fix',hypothesisId:'A'})}).catch(()=>{});
+            return null;
+          })()}
+          {/* #endregion */}
           <Line
             yAxisId="right"
             type="monotone"
             dataKey="revenue"
             stroke="#FB923C"
             strokeWidth={2}
-            dot={{ fill: '#FB923C', r: 4 }}
+            dot={false}
+          />
+          {/* Invisible appointments line to keep left Y-axis visible */}
+          <Line
+            yAxisId="left"
+            type="monotone"
+            dataKey="appointments"
+            stroke="transparent"
+            strokeWidth={0}
+            dot={false}
+            activeDot={false}
+          />
+          {/* Costs Dashed Line */}
+          <Line
+            yAxisId="right"
+            type="monotone"
+            dataKey="costs"
+            stroke="#9CA3AF"
+            strokeWidth={2}
+            strokeDasharray="4 4"
+            dot={false}
+            opacity={0.6}
           />
         </ComposedChart>
       </ResponsiveContainer>

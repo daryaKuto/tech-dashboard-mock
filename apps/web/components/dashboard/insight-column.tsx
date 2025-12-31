@@ -32,7 +32,7 @@ export function InsightColumn() {
   const [timeRange, setTimeRange] = useState<'all' | 'avg' | '30days'>('all');
 
   return (
-    <div className="w-full space-y-4 sm:space-y-6 lg:w-[320px] lg:min-h-screen">
+    <div className="w-full space-y-4 sm:space-y-6 lg:w-[280px] lg:min-h-screen">
       {/* Time Range Filter */}
       <div className="flex flex-wrap items-center gap-2">
         <button

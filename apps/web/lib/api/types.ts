@@ -77,12 +77,35 @@ export function createApiError(
  * Format Zod errors for API responses
  */
 export function formatZodError(error: z.ZodError): ApiErr {
-  const firstError = error.errors[0];
+  // Safety check: ensure error is a valid ZodError with errors array
+  if (!error || typeof error !== 'object' || !('errors' in error)) {
+    return createApiError(
+      'validation_error',
+      'Validation failed: Invalid error object',
+      {
+        issues: [],
+      }
+    );
+  }
+  
+  // Safety check: ensure errors array exists and has items
+  const errors = Array.isArray(error.errors) ? error.errors : [];
+  if (errors.length === 0) {
+    return createApiError(
+      'validation_error',
+      'Validation failed: No error details available',
+      {
+        issues: [],
+      }
+    );
+  }
+  
+  const firstError = errors[0];
   return createApiError(
     'validation_error',
     firstError?.message ?? 'Validation failed',
     {
-      issues: error.errors,
+      issues: errors,
     }
   );
 }
